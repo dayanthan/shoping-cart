@@ -1,0 +1,91 @@
+<%- model_class = UserCredit -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+</div>
+<%if current_user.user_email==admin.user_email%>
+<%own=UserCredit.where("created_user_id=?",current_user.user_id).map(&:credit_amount)  %>
+<%admin.inspect%>
+<%foradmin=UserCredit.all.map(&:admin_credit_amount)  %>
+<%total=own+foradmin%>
+<strong style="  color: red;font-size: 25px;">
+<%amt=total.inject{|sum,x| sum + x }%>
+Hi <%=current_user.user_name%>, your credit amount: <%=(amt) ? amt : 0%> </strong>
+<div style="cursor:pointer;padding: 15px 0px;color: blue;font-size: 15px;font-weight: bold;">
+<span id="showamount" onclick="showhide('show');" >Show all users total amount</span>
+<span id="hideamount" onclick="showhide('hide');" style="display:none; ">Hide all users total amount</span>
+</div>
+<table class="table table-striped" id="alluser">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:Number) %></th>
+      <th><%= model_class.human_attribute_name(:created_user_id) %></th>
+      <th><%= model_class.human_attribute_name(:purchased_user_id) %></th>
+      <th><%= model_class.human_attribute_name(:item_id) %></th>
+      <th><%= model_class.human_attribute_name(:credit_amount) %></th>
+      <th><%= model_class.human_attribute_name(:admin_credit_amount) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+    </tr>
+  </thead>
+  <tbody>
+   <%i=0%>
+    <% @user_credits.each do |user_credit| %>
+      <tr>
+      <td><%=i=i+1%></td>
+        <td><%= user_credit.created_user_id %></td>
+        <td><%= user_credit.purchased_user_id %></td>
+        <td><%= user_credit.item_id %></td>
+        <td><%= user_credit.credit_amount %></td>
+        <td><%= user_credit.admin_credit_amount %></td>
+        <td><%= user_credit.created_at.strftime("%e %b %Y %H:%M:%S%p") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<table class="table table-striped" id="induser" style="display:none">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:Number) %></th>
+      <th><%= model_class.human_attribute_name(:user_name) %></th>
+      <th><%= model_class.human_attribute_name(:credit_amount) %></th>
+    </tr>
+  </thead>
+  <tbody>
+   <%i=0%>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%=i=i+1%></td>
+        <td><%= user.user_name %></td>
+        <%amount=UserCredit.where("created_user_id=?",user.user_id).map(&:credit_amount)%>
+        <td><%=amount.inject{|sum,x| sum + x }%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+<%else%>
+<%own=UserCredit.where("created_user_id=?",current_user.user_id).map(&:credit_amount)  %>
+<strong style="  color: red;font-size: 25px;">
+<%=amt=own.inject{|sum,x| sum + x }%>
+HI <%=current_user.user_name%>, your credit amount: <%=(amt) ? amt : 0%></strong>
+<%end%>
+
+<script type="text/javascript">
+  function showhide (action) {
+
+  if (action=="show")
+    {
+      $("#alluser").hide();
+      $("#induser").show();
+      $("#showamount").hide();
+      $("#hideamount").show();
+    }
+    else {
+      $("#alluser").show();
+      $("#induser").hide();
+      $("#showamount").show();
+      $("#hideamount").hide();
+    }
+  }
+</script>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1><div style="font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#333333;" height="20"> Welcome to shoping cart, <%= @user.user_name %></div></h1><br>
+    <p>
+      You have successfully signed up to shoping cart,<br>
+      your username is: <b><%= @user.user_email%>.</b><br>
+      your password is: <b><%= @user.password %>.</b><br>
+    </p>
+    <p>
+      To login to the site, just follow this link: <%= @url %>
+        <div style="font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#333333;" height="20"> <a href="<%= @url%>" title="Activate your account" target="_blank" style="color:#5099AC;text-decoration:none;">Click here to Activate your account</div>
+     
+    </p>
+    <p>Thanks for joining and have a great day!</p>
+  </body>
+</html>

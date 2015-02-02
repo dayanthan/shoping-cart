@@ -1,0 +1,52 @@
+<div class="page-header">
+  <h1>Login</h1>
+</div>
+<%= form_for @user, :url => {:action => "loginuser"}, :html => { :class => 'form-horizontal' } do |f| %>
+ <div class="control-group">
+    <%= f.label :user_email, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :user_email, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :password, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.password_field :password, :class => 'text_field' %>
+    </div>
+  </div>
+ 
+  <div class="form-actions">
+    <%#= f.submit nil, :class => 'btn btn-primary'%>
+    <%= button_tag(type: 'submit', class: "btn btn-primary", :onclick => "return Validateform()") do %>
+    <i class="icon-ok icon-white"></i> Login
+    <% end %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                root_path, :class => 'btn' %>
+  </div>
+<% end %>
+<script type="text/javascript">
+  function Validateform () {
+    var email=$("#user_user_email").val();
+    var password=$("#user_password").val();
+    var atpos = email.indexOf("@");
+    var dotpos = email.lastIndexOf(".");
+
+   if (email==""){
+      alert( "Enter Email Address.")
+      return false
+    }
+    else if (atpos<1 || dotpos<atpos+2 || dotpos+2>=email.length) {
+        alert("Not a valid e-mail address");
+        return false;
+    }
+    else if (password==""){
+      alert( "Enter Password.")
+      return false
+    }
+    else {
+      return true
+    }
+     // body...
+  }
+
+</script>

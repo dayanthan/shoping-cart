@@ -1,0 +1,40 @@
+<%- model_class = User -%>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:Number) %></th>
+      <th><%= model_class.human_attribute_name(:user_name) %></th>
+      <th><%= model_class.human_attribute_name(:user_email) %></th>
+     <!--  <th><%= model_class.human_attribute_name(:usertype) %></th> -->
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%i=0%>
+    <% !@users.nil? && @users.each do |user| %>
+      <tr>
+        <td><%=i=i+1%></td>
+        <td><%= link_to user.user_name, user_path(user), :title=>"view"%></td>
+        <td><%= user.user_email %></td>
+        <%pvalue=Profile.find_by_user_id(user.user_id)%>
+       <!--  <td><%#= link_to "Profile", profile_path(pvalue.id)%><%= user.user_type %></td> -->
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_user_path(user), :class => 'btn btn-mini' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      user_path(user),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<div><%= will_paginate @users %><div>
+
+<script type="text/javascript">
+  $(function(){
+     $('.pagination a').attr('data-remote', 'true')
+  });
+</script>

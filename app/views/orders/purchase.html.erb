@@ -1,0 +1,190 @@
+<style type="text/css">
+  .smallbox{
+    width: 38px;
+  }
+  select {
+  width: 130px;
+  border: 1px solid #cccccc;
+  background-color: #ffffff;
+}
+select.date-select {
+    width:1020px;
+    border: 1px solid #cccccc;
+    background-color: #ffffff;
+}
+</style>
+<%- model_class = Order -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => [:'helpers.titles.new', 'New %{model}'], :model => model_class.model_name.human.titleize %></h1>
+</div>
+<%#=request.remote_ip%>
+
+<%= form_for @order, :html => { :class => 'form-horizontal' }, :url => { :action => :purchase_option }, :remote => true  do |f| %>
+<div class="control-group">
+    <%= f.label :name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.hidden_field :id, :value => @item.id %>
+      <%= f.text_field :cart_id, :class => 'text_field',:value => @item.name , disabled: true%>
+     <!--  
+      <strong><%=@item.name%></strong> -->
+
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :price, :class => 'control-label' %>
+    <div class="controls">
+      <!-- <strong><%=@item.price%></strong> -->
+       <%= f.text_field :cart_id, :class => 'text_field',:value => @item.price, disabled: true %>
+    </div>
+  </div>
+<!--   
+  <div class="control-group">
+    <%#= f.label :ip_address, :class => 'control-label' %>
+    <div class="controls">
+      <%#= f.text_field :ip_address, :class => 'text_field' %>
+    </div>
+  </div> -->
+  <div class="control-group">
+    <%= f.label :first_name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :first_name, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :last_name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :last_name, :class => 'text_field' %>
+    </div>
+  </div>
+
+    <div class="control-group">
+    <%= f.label :card_number, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :cardnumber_1, :class => 'text_field smallbox' %>
+      <%= f.text_field :cardnumber_2, :class => 'text_field smallbox' %>
+      <%= f.text_field :cardnumber_3, :class => 'text_field smallbox' %>
+      <%= f.text_field :cardnumber_4, :class => 'text_field smallbox' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :card_verification, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :cardnumber_5, :class => 'text_field ' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :card_type, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :card_type, [["Visa", "visa"], ["MasterCard", "master"], ["Discover", "discover"], ["American Express", "american_express"]] %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :card_expires_on, :class => 'control-label' %>
+    <div class="controls">
+    <%= f.date_select :card_expires_on, :order => [:year, :month], :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10)%>
+    <%#= f.date_select :dateinstructed, :order => [:day, :month, :year] %>
+    <%#= f.date_select :card_expires_on, :order => [:month, :year] %>
+    <%#= f.date_select :card_expires_on, :discard_day => true, :start_year => Time.now.year, :use_month_numbers => true, :prompt => true %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :address, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :address, :class => 'text_field ' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :city, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :city, :class => 'text_field ' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :state, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :state, :class => 'text_field ' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :country, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :country, :class => 'text_field ' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :zipcode, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :zipcode, :class => 'text_field ' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :phone_no, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :phone_no, :class => 'text_field ' %>
+    </div>
+  </div>
+
+
+  
+  <div class="form-actions">
+    <%#= f.submit nil, :class => 'btn btn-primary', :name => 'daya'  %>
+    <%= button_tag(type: 'submit', class: "btn btn-primary", :onclick => "return Validateform()") do %>
+    <i class="icon-ok icon-white"></i> Submit
+    <% end %>
+    <%= link_to t('.back', :default => t("helpers.links.back")),
+              items_path, :class => 'btn'  %>
+    <%#= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                orders_path, :class => 'btn' %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  function Validateform () {
+    var address=$("#order_address").val();
+    var city=$("#order_city").val();
+    var state=$("#order_state").val();
+    var country=$("#order_country").val();
+    var zipcode=$("#order_zipcode").val();
+    var phone=$("#order_phone_no").val();
+
+   if (address==""){
+      alert( "Enter Address.")
+      return false
+    }
+    else if (city==""){
+      alert( "Enter city.")
+      return false
+    }
+    else if (state==""){
+      alert( "Enter state.")
+      return false
+    }
+    else if (country==""){
+      alert( "Enter country.")
+      return false
+    }
+    else if (zipcode==""){
+      alert( "Enter zipcode.")
+      return false
+    }
+    else if (phone==""){
+      alert( "Enter phone.")
+      return false
+    }
+    else{
+      return true
+    }
+    // else{
+    //   alert("The passwords you typed do not match. Type the new password in both text boxes.")
+    //   return false
+
+    // }
+    // body...
+  }
+
+</script>

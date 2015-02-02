@@ -1,0 +1,57 @@
+<%= form_for @item, :html => { :class => 'form-horizontal' }, :html => { :multipart => true } do |f| %>
+  <div class="control-group">
+    <%= f.label :category_id, :class => 'control-label' %>
+    <div class="controls">
+      <%#= f.text_field :category_id, :class => 'text_field' %>
+      <%@categories = Category.all%>
+      <%= f.select :category_id, options_from_collection_for_select(@categories, 'id', 'name') %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :discription, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :discription, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group" style="margin-left: 50px;">
+    <%= f.label :avatar, :class => 'control-label' %>
+    <div class="controls">
+    <%unless @item.avatar_file_name.nil? %>
+        <%=image_tag @item.avatar.url(:thumb)  %>
+        <%= f.file_field :avatar, :class => 'file_field' %>
+      <%else%>
+        <%= f.file_field :avatar, :class => 'file_field' %>
+      <%end%>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :price, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :price, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :discount, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :discount, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :available, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :available, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                items_path, :class => 'btn' %>
+  </div>
+<% end %>

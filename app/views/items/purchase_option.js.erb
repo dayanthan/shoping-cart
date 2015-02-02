@@ -1,0 +1,5 @@
+ $("#loading").hide();
+ alert("<%=@message%>");
+<%if @message=="This transaction has been approved"%>
+window.location.href="/items"
+<%end%>
