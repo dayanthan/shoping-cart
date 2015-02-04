@@ -13,7 +13,7 @@ class ItemsController < ApplicationController
        @items= item.paginate(:page => params[:page], :per_page => 3)
     elsif 
       item = Item.all.order("name asc")
-      @items=item.paginate(:page => params[:page], :per_page => 5)
+      @items=item#.paginate(:page => params[:page], :per_page => 5)
     end
     respond_to do |format|
        format.js
@@ -25,6 +25,7 @@ class ItemsController < ApplicationController
   # GET /items/1
   # GET /items/1.json
   def show
+    @user=User.find_by_user_id(@item.user_id)
   end
 
   # GET /items/new

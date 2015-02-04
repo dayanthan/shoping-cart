@@ -8,12 +8,11 @@
 </head>
 <body>
 <div align="center">
-  <div>
-  <%#=admin.inspect if current_user && admin%>
+  <div style="border: 1px solid; padding: 20px; background-color: black;color: white;">
   	<% if !current_user.nil? %>
-  	Welcome <%= current_user.user_name %> <%= link_to "Sign out", logout_path, :method => :delete %> -
+  	Welcome <%= current_user.user_name.capitalize %> <%= link_to "- Sign out", logout_path, :method => :delete %> -
   	 <%pvalue=Profile.find_by_user_id(current_user.user_id)%>
-     <%if current_user.user_email==admin.user_email%>
+     <%if !admin.nil? && current_user.user_email==admin.user_email%>
      <strong><%= link_to "Users", users_path%></strong> -
      <%end%>
      <strong><%= link_to "Home", root_path%></strong> -

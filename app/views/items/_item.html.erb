@@ -1,60 +1,97 @@
+   <style type="text/css">
+    #makeMeScrollable
+    {
+      width:100%;
+      /*height: 330px;*/
+      position: relative;
+    }
+    #makeMeScrollable div.scrollableArea img
+    {
+      position: relative;
+      float: left;
+      margin: 0;
+      padding: 0;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -o-user-select: none;
+      user-select: none;
+    }
+    .dl-horizontal dt{
+      width: 100px;
+    }
+    .form-actions{
+       margin-bottom: 0px;
+    }
+  </style>
+
+
 <%- model_class = Item -%>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th><%= model_class.human_attribute_name(:Sno) %></th>
-      <th><%= model_class.human_attribute_name(:name) %></th>
-      <th style="width: 500px;"><%= model_class.human_attribute_name(:discription) %></th>
-      <th><%= model_class.human_attribute_name(:image) %></th>
-      <th><%= model_class.human_attribute_name(:price) %></th>
-      <th><%= model_class.human_attribute_name(:discount) %></th>
-      <th><%= model_class.human_attribute_name(:category_id) %></th>
-      <th><%= model_class.human_attribute_name(:available) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <%i=0%>
-    <% @items.each do |item| %>
-      <tr>
-        <td><%= i=i+1 %></td>
-        <td><srong><%= link_to item.name, item_path(item)%></srong></td>
-        <td><%= truncate(item.discription, length: 150) %></td>
-        <td><%=image_tag item.avatar.url(:thumb)  if !item.nil? && !item.avatar_file_name.nil?%></td>
-        <td><%= item.price %></td>
-        <td><%= item.discount %></td>
-        <td><%= item.category.name %></td>
-        <td><%= item.available %></td>
-        <td><%= item.created_at.strftime("%d %b %Y") %></td>
-        <td>
-        <% if !current_user.nil? && current_user.user_id==item.user_id%>
-                    <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                                edit_item_path(item), :class => 'btn btn-mini' %>
-                                
-                    <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                                item_path(item),
-                                :method => :delete,
-                                :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-                                :class => 'btn btn-mini btn-danger' %>
-        <%else%>
+  <div id="makeMeScrollable">
+  <table class="table table-striped">
+
+    <tbody>
+      <%i=0%>
+      <% @items.each do |item| %>
+        <td style="text-align:center;"><%#= i=i+1 %>
+          <%@item=item%>
+          <b ><%= link_to @item.name.titleize, item_path(item)   %></b>
+          <div style="border: 1px solid #cccccc; width: 260px;">
+              <dl class="dl-horizontal" >
+                <dd style="margin: 10px;min-height: 190px;">
+                <%=  link_to  item_path(item) do %>
+                  <%= image_tag @item.avatar.url(:original) if !@item.avatar_file_name.nil?%>
+                <% end %>
+                <%#= image_tag @item.avatar.url(:original)  if !@item.avatar_file_name.nil? %></dd>
+                <dd style="margin: 10px;"><%= truncate(@item.discription, length: 120) %></dd>
+                <dt><strong><%= model_class.human_attribute_name(:price) %>:</strong></dt>
+                <dd><%= @item.price %></dd>
+                <dt><strong><%= model_class.human_attribute_name(:discount) %>:</strong></dt>
+                <dd><%= @item.discount %></dd>
+                <dt><strong><%= model_class.human_attribute_name(:category) %>:</strong></dt>
+                <dd><%= @item.category.name %></dd>
+                <dt><strong><%= model_class.human_attribute_name(:available) %>:</strong></dt>
+                <dd><%= @item.available %></dd>
+              </dl>
+              <div class="form-actions" align="center">
+                <%#= link_to t('.back', :default => t("helpers.links.back")),
+                            items_path, :class => 'btn'  %>
+                <% if !current_user.nil? && current_user.user_id==@item.user_id%>
+                <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                            edit_item_path(@item), :class => 'btn' %>
+                <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                            item_path(@item),
+                            :method => 'delete',
+                            :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                            :class => 'btn btn-danger' %>
+
+                <%elsif !current_user.nil?%>
                       <%if item.available > 0%>
                         <%= link_to t('.edit', :default => t("helpers.links.purchase")),
                                     purchase_path(item.id), :class => 'btn btn-danger' %>
                       <%else%>
                         <img src="/assets/soldout.jpg" alt="Sold Out" height="75" width="75">
                       <%end%>
-        <%end%>
-        </td>
-      </tr>
+                <%else%>
+                  <span ><%= link_to t('.new', :default => t("helpers.links.purchase")), login_path, :class => 'btn btn-primary' %></span>
+                <%end%>
+              </div>
+          </div>
+      </td>
     <% end %>
   </tbody>
 </table>
+</div>
 
 
+  <script type="text/javascript">
+    // Initialize the plugin with no custom options
+    $(document).ready(function () {
+      // None of the options are set
+      $("div#makeMeScrollable").smoothDivScroll({
+        // autoScrollingMode: "onStart"
+      });
+    });
+  </script>
 
-<script type="text/javascript">
-  $(function(){
-     $('.pagination a').attr('data-remote', 'true')
-  });
-</script>
+

@@ -1,0 +1,33 @@
+<%- model_class = Item -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+</div>
+<span>
+Show By:  <select id="mySelect" onchange="myFunction()">
+<% !@categories.nil? && @categories.each do |f| %>
+  <option value="<%=f.id%>"><%=f.name%></option>
+  <%end%>
+  <option value="all">All</option>
+</select></span>
+<span style="position: absolute;padding-left: 50px;"><%= link_to t('.new', :default => t("helpers.links.new item")),
+            new_item_path,
+            :class => 'btn btn-primary' %></span>
+<div id="item_index" style="width:100%;">
+        <%= render :partial=>"item" %>
+</div>
+<div><%= will_paginate @items unless @items.nil?%><div>
+
+<script type="text/javascript">
+  function myFunction() {
+    var category_id=$("#mySelect").val();
+    $.ajax({
+                type: "GET",
+                url: "/category_filter",
+                data: "category_id="+category_id+"&filter=yes&page=1",
+                dataType: "script"
+                 });
+    }
+
+</script>
+
+

@@ -2,7 +2,7 @@
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
 </div>
-<%if current_user.user_email==admin.user_email%>
+<%if !current_user.nil? && !admin.nil? && current_user.user_email==admin.user_email%>
 <%own=UserCredit.where("created_user_id=?",current_user.user_id).map(&:credit_amount)  %>
 <%admin.inspect%>
 <%foradmin=UserCredit.all.map(&:admin_credit_amount)  %>

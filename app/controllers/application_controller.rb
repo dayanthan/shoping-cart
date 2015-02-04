@@ -11,7 +11,8 @@ class ApplicationController < ActionController::Base
     # @current_user ||= User.find_by_id(session[:user_id]) if session[:user_id]
   end
   def admin
-    @admin = User.find_by_user_email("daya.naukri@gmail.com")
+    admin = (current_user.user_email=="daya.naukri@gmail.com")
+    @admin = User.find_by_user_email("daya.naukri@gmail.com") if admin
     # @admin = User.find_by_user_type(true)
   end
 

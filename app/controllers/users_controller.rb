@@ -1,11 +1,15 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-
+ # before_action :admin, :only => [:index]
+  #before_action :athuenticate?
   # GET /users
   # GET /users.json
   def index
-    @users = User.all.paginate(:page => params[:page], :per_page => 5)
-   
+    if !current_user.nil? && !admin.nil? && current_user.present? && admin.present?
+      @users = User.all.paginate(:page => params[:page], :per_page => 5)
+   else
+    redirect_to root_path
+  end
   end
   # GET /users/1
   # GET /users/1.json
@@ -15,6 +19,7 @@ class UsersController < ApplicationController
   def shop_index
 
   end
+  
   
   def login
     @user = User.new
@@ -27,7 +32,11 @@ class UsersController < ApplicationController
     if !@user.nil? && @user.user_type==true
       session[:user]=@user
       flash[:notice] = "Login successfully"
-      redirect_to root_path
+      if admin
+        redirect_to users_path
+      else
+        redirect_to root_path
+      end
     elsif !@user.nil?
       flash[:notice] = "Your accout not activated"
       redirect_to login_path

@@ -1,0 +1,60 @@
+<%- model_class = Item -%>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:Sno) %></th>
+      <th><%= model_class.human_attribute_name(:name) %></th>
+      <th style="width: 250px;"><%= model_class.human_attribute_name(:discription) %></th>
+      <th><%= model_class.human_attribute_name(:image) %></th>
+      <th><%= model_class.human_attribute_name(:price) %></th>
+      <th><%= model_class.human_attribute_name(:discount) %></th>
+      <th><%= model_class.human_attribute_name(:category_id) %></th>
+      <th><%= model_class.human_attribute_name(:available) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%i=0%>
+    <% @items.each do |item| %>
+      <tr>
+        <td><%= i=i+1 %></td>
+        <td><srong><%= link_to item.name, item_path(item)%></srong></td>
+        <td><%= truncate(item.discription, length: 150) %></td>
+        <td><%=image_tag item.avatar.url(:thumb)  if !item.nil? && !item.avatar_file_name.nil?%></td>
+        <td><%= item.price %></td>
+        <td><%= item.discount %></td>
+        <td><%= item.category.name %></td>
+        <td><%= item.available %></td>
+        <td><%= item.created_at.strftime("%d %b %Y") %></td>
+        <td>
+        <% if !current_user.nil? && current_user.user_id==item.user_id%>
+                    <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                                edit_item_path(item), :class => 'btn btn-mini' %>
+                                
+                    <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                                item_path(item),
+                                :method => :delete,
+                                :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                                :class => 'btn btn-mini btn-danger' %>
+        <%else%>
+                      <%if item.available > 0%>
+                        <%= link_to t('.edit', :default => t("helpers.links.purchase")),
+                                    purchase_path(item.id), :class => 'btn btn-danger' %>
+                      <%else%>
+                        <img src="/assets/soldout.jpg" alt="Sold Out" height="75" width="75">
+                      <%end%>
+        <%end%>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+
+<script type="text/javascript">
+  $(function(){
+     $('.pagination a').attr('data-remote', 'true')
+  });
+</script>

@@ -1,17 +1,23 @@
 <%- model_class = Item -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+  <h1><%=t '.title', :default => @item.name.titleize %></h1>
 </div>
 
-<dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
-  <dd><%= @item.name %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:discription) %>:</strong></dt>
-  <dd><%= @item.discription %></dd>
+<dt><strong><%= model_class.human_attribute_name(:owner) %>:
+  <dd><%= @user.user_email %></dd></strong></dt>
+<div style="border: 1px solid #cccccc;width: 325px;margin-bottom: 20px;">
+<dl class="dl-horizontal" >
+ <!--  <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
+  <dd><%= @item.name %></dd> -->
+<!--   <dt><strong><%= model_class.human_attribute_name(:image) %>:</strong></dt>-->
+  <dd style="margin: 10px; "><%= image_tag @item.avatar.url(:original)  if !@item.avatar_file_name.nil? %></dd>
+<!--   <dt ><strong><%= model_class.human_attribute_name(:discription) %>:</strong></dt>
+ -->  
+  
+  <dd style="margin: 10px;"><%= @item.discription %></dd>
   <dt><strong><%= model_class.human_attribute_name(:price) %>:</strong></dt>
   <dd><%= @item.price %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:image) %>:</strong></dt>
-  <dd><%= image_tag @item.avatar.url(:thumb)  if !@item.avatar_file_name.nil? %></dd>
+  
   <dt><strong><%= model_class.human_attribute_name(:discount) %>:</strong></dt>
   <dd><%= @item.discount %></dd>
   <dt><strong><%= model_class.human_attribute_name(:category) %>:</strong></dt>
@@ -23,6 +29,7 @@
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
               items_path, :class => 'btn'  %>
+  <% if !current_user.nil? && current_user.user_id==@item.user_id%>
   <%= link_to t('.edit', :default => t("helpers.links.edit")),
               edit_item_path(@item), :class => 'btn' %>
   <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
@@ -30,5 +37,7 @@
               :method => 'delete',
               :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
               :class => 'btn btn-danger' %>
+  <%end%>
+</div>
 </div>
 
