@@ -59,8 +59,8 @@ Mytestapp::Application.configure do
     :port           => 587,
     :domain         => 'localhost:3000',
     :authentication => :plain,
-     :user_name      => 'dayanthan86@gmail.com',
-     :password       => 'dayac2010'
+     :user_name      => '********@gmail.com,
+     :password       => '*********'
   }
 
 
